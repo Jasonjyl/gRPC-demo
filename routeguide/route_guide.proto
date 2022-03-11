@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+option go_package = "github.com/Jasonjyl/gRPC-demo";
+
+package routeguide;
+
+service RouteGuide {
+  rpc GetFeature(Point) returns (Feature) {} // 简单的rpc服务
+  rpc ListFeatures(Rectangle) returns (stream Feature) {} // 服务端流式rpc，返回的是stream响应
+  rpc RecordRoute(stream Point) returns (RouteSummary) {} // 客户端流式rpc，发送的是stream请求
+  rpc RouteChat(stream RouteNote) returns (stream RouteNote) {} // 双端流式rpc，发送stream请求，返回stream响应
+}
+
+message Point {
+  int32 latitude = 1;
+  int32 longitude = 2;
+}
+
+message Rectangle {
+  Point lo = 1;
+  Point hi = 2;
+}
+
+message Feature {
+  string name = 1;
+  Point location = 2;
+}
+
+message RouteNote {
+  Point location = 1;
+  string message = 2;
+}
+
+message RouteSummary {
+  int32 point_count = 1;
+  int32 feature_count = 2;
+  int32 distance = 3;
+  int32 elapsed_time = 4;
+}
